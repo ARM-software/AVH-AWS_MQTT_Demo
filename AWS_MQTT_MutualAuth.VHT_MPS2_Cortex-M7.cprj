@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<cprj schemaVersion="1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="CPRJ.xsd">
+
+  <created timestamp="2022-02-10T14:25:12" tool="uVision V5.36.0.0"/>
+
+  <info>
+    <name>AWS MQTT MutualAuth Demo</name>
+    <description>Demonstrates the subscribe-publish workflow of MQTT</description>
+    <category>AWS, Arduino, Board, Cloud, Example, IoT, MQTT, Module, Socket, WiFi</category>
+    <license>Apache 2.0, BSD 3-Clause</license>
+  </info>
+
+  <packages>
+    <package name="CMSIS-Driver" vendor="ARM"/>
+    <package name="CMSIS-FreeRTOS" vendor="ARM" version="10.4.3:10.4.3"/>
+    <package name="CMSIS" vendor="ARM"/>
+    <package name="mbedTLS" vendor="ARM" version="1.7.0:1.7.0"/>
+    <package name="backoffAlgorithm" vendor="AWS" version="1.0.0-Beta:1.0.0-Beta"/>
+    <package name="coreMQTT" vendor="AWS" version="1.1.0-Beta:1.1.0-Beta"/>
+    <package name="coreMQTT_Agent" vendor="AWS" version="1.0.1-Beta:1.0.1-Beta"/>
+    <package name="corePKCS11" vendor="AWS" version="3.0.0-Beta:3.0.0-Beta"/>
+    <package name="PKCS11" vendor="Arm-Packs"/>
+    <package name="ARM_Compiler" vendor="Keil"/>
+    <package name="V2M-MPS2_CMx_BSP" vendor="Keil" version="1.8.0:1.8.0"/>
+  </packages>
+
+  <compilers>
+    <compiler name="AC6" version="6.0.0:6.99.99"/>
+  </compilers>
+
+  <target Ddsp="NO_DSP" Dendian="Little-endian" Dfpu="DP_FPU" Dmve="NO_MVE" Dname="CMSDK_CM7_DP_VHT" Dsecure="Non-secure" Dtz="NO_TZ" Dvendor="ARM:82">
+    <output intdir="./Objects/" name="image" outdir="./Objects/" type="exe"/>
+    <ldflags add="--strict --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols --info sizes --info totals --info unused --info veneers --entry=Reset_Handler" compiler="AC6" file="./RTE/Device/CMSDK_CM7_DP_VHT/ac6_arm.sct"/>
+    <cflags add="-O1 -Wno-documentation -Wno-documentation-unknown-command -Wno-license-management -Wno-missing-noreturn -Wno-missing-prototypes -Wno-missing-variable-declarations -Wno-nonportable-include-path -Wno-packed -Wno-parentheses-equality -Wno-reserved-id-macro -Wno-sign-conversion -Wno-unused-macros -ffunction-sections -fno-rtti -fshort-enums -fshort-wchar -funsigned-char -gdwarf-4 -std=c99 -xc" compiler="AC6"/>
+    <asflags compiler="AC6" use="armasm"/>
+    <includes>./Board/VHT_MPS2_Cortex-M7</includes>
+    <defines>configENABLED_NETWORKS=AWSIOT_NETWORK_TYPE_ETH</defines>
+  </target>
+
+  <components>
+    <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM"/>
+    <component Cclass="CMSIS" Cgroup="RTOS2" Csub="FreeRTOS" Cvariant="Cortex-M" Cvendor="ARM"/>
+    <component Cclass="CMSIS Driver" Cgroup="USART" Cvendor="Keil"/>
+    <component Cclass="Device" Cgroup="Startup" Cvariant="C Startup" Cvendor="Keil">
+      <file attr="config" category="header" name="CMSIS/Config/RTE_Device.h" version="1.0.0"/>
+      <file attr="config" category="linkerScript" name="Device/CMSDK_CM7/Source/ARM/ac6_arm.sct" version="1.0.0"/>
+      <file attr="config" category="sourceC" name="Device/CMSDK_CM7/Source/startup_CMSDK_CM7.c" version="1.1.0"/>
+      <file attr="config" category="sourceC" name="Device/CMSDK_CM7/Source/system_CMSDK_CM7.c" version="1.1.0"/>
+    </component>
+    <component Cclass="FreeRTOS" Cgroup="backoffAlgorithm" Cvendor="AWS"/>
+    <component Cclass="FreeRTOS" Cgroup="coreMQTT" Cvendor="AWS">
+      <cflags add="-I ./amazon-freertos/libraries/logging/include -I ./config_files" compiler="AC6"/>
+    </component>
+    <component Cclass="FreeRTOS" Cgroup="coreMQTT Agent" Cvendor="AWS">
+      <cflags add="-I ./amazon-freertos/libraries/logging/include -I ./config_files" compiler="AC6"/>
+    </component>
+    <component Cclass="FreeRTOS" Cgroup="corePKCS11" Cvariant="Custom" Cvendor="AWS">
+      <cflags add="-DMBEDTLS_CONFIG_FILE=\&quot;aws_mbedtls_config.h\&quot; -I./Interfaces -I./amazon-freertos/libraries/logging/include -I./config_files -Wno-macro-redefined" compiler="AC6"/>
+    </component>
+    <component Cclass="Security" Cgroup="PKCS11" Cvariant="No Implementation" Cvendor="AWS"/>
+    <component Cclass="Security" Cgroup="mbed TLS" Cvendor="ARM">
+      <cflags add="-DMBEDTLS_CONFIG_FILE=\&quot;aws_mbedtls_config.h\&quot; -I./Interfaces -I./config_files" compiler="AC6"/>
+      <file attr="config" category="header" name="configs/mbedTLS_config.h" version="2.24.0"/>
+    </component>
+    <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil">
+      <file attr="config" category="header" name="Config/EventRecorderConf.h" version="1.1.0"/>
+    </component>
+    <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDERR" Cvariant="User" Cvendor="Keil"/>
+    <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDIN" Cvariant="User" Cvendor="Keil"/>
+    <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="I/O" Csub="STDOUT" Cvariant="User" Cvendor="Keil"/>
+    <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Config" Cvariant="CMSIS RTOS2" Cvendor="ARM">
+      <file attr="config" category="header" name="CMSIS/RTOS2/FreeRTOS/Config/ARMCM/FreeRTOSConfig.h" version="10.3.0"/>
+    </component>
+    <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Core" Cvariant="Cortex-M" Cvendor="ARM"/>
+    <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Event Groups" Cvendor="ARM"/>
+    <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Heap" Cvariant="Heap_5" Cvendor="ARM"/>
+    <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Stream Buffer" Cvendor="ARM"/>
+    <component Cbundle="FreeRTOS" Cclass="RTOS" Cgroup="Timers" Cvendor="ARM"/>
+    <component Cbundle="V2M-MPS2" Cclass="Board Support" Cgroup="Common" Cvendor="Keil"/>
+  </components>
+
+  <files>
+    <group name="App">
+      <cflags add="-I ./Interfaces -I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./amazon-freertos/libraries/logging/include -I ./config_files -Wno-pragma-pack" compiler="AC6"/>
+      <file category="sourceC" name="./app_main.c"/>
+      <file category="sourceC" name="./Board/IMXRT1050-EVKB/network_startup.c"/>
+      <file category="sourceC" name="./Board/VHT_MPS2_Cortex-M7/socket_startup.c"/>
+    </group>
+    <group name="Documentation">
+      <file category="doc" name="./README.md"/>
+    </group>
+    <group name="demos_common_pkcs11_helpers">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/transport/secure_sockets -I ./amazon-freertos/libraries/logging/include -I ./config_files -Wno-macro-redefined" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/demos/common/pkcs11_helpers/pkcs11_helpers.c"/>
+      <file category="header" name="./amazon-freertos/demos/common/pkcs11_helpers/pkcs11_helpers.h"/>
+    </group>
+    <group name="demos_coreMQTT">
+      <cflags add="-I ./amazon-freertos/demos/common/pkcs11_helpers -I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/abstractions/secure_sockets/include -I ./amazon-freertos/libraries/abstractions/transport/secure_sockets -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include/private -I ./amazon-freertos/libraries/logging/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/demos/coreMQTT/mqtt_demo_mutual_auth.c"/>
+    </group>
+    <group name="demos_demo_runner">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/demos/network_manager -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/abstractions/secure_sockets/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/demos/demo_runner/aws_demo.c"/>
+      <file category="sourceC" name="./amazon-freertos/demos/demo_runner/iot_demo_freertos.c"/>
+      <file category="sourceC" name="./amazon-freertos/demos/demo_runner/iot_demo_runner.c"/>
+    </group>
+    <group name="demos_include">
+      <file category="header" name="./amazon-freertos/demos/include/aws_clientcredential.h"/>
+      <file category="header" name="./amazon-freertos/demos/include/aws_clientcredential_keys.h"/>
+      <file category="header" name="./amazon-freertos/demos/include/aws_demo.h"/>
+      <file category="header" name="./amazon-freertos/demos/include/aws_iot_metrics.h"/>
+      <file category="header" name="./amazon-freertos/demos/include/iot_config_common.h"/>
+      <file category="header" name="./amazon-freertos/demos/include/iot_demo_logging.h"/>
+      <file category="header" name="./amazon-freertos/demos/include/iot_demo_runner.h"/>
+    </group>
+    <group name="demos_network_manager">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/abstractions/secure_sockets/include -I ./amazon-freertos/libraries/abstractions/wifi/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include/private -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/demos/network_manager/aws_iot_network_manager.c"/>
+      <file category="header" name="./amazon-freertos/demos/network_manager/iot_network_manager_private.h"/>
+    </group>
+    <group name="libraries_abstractions_platform_freertos">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include/private -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/abstractions/platform/freertos/iot_clock_freertos.c"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/abstractions/platform/freertos/iot_threads_freertos.c"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/platform/freertos/include/platform/iot_platform_types_freertos.h"/>
+    </group>
+    <group name="libraries_abstractions_platform_include">
+      <file category="header" name="./amazon-freertos/libraries/abstractions/platform/include/platform/iot_clock.h"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/platform/include/platform/iot_network.h"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/platform/include/platform/iot_threads.h"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/platform/include/types/iot_network_types.h"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/platform/include/types/iot_platform_types.h"/>
+    </group>
+    <group name="libraries_abstractions_secure_sockets">
+      <file category="header" name="./amazon-freertos/libraries/abstractions/secure_sockets/include/iot_secure_sockets.h"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/secure_sockets/include/iot_secure_sockets_config_defaults.h"/>
+    </group>
+    <group name="libraries_abstractions_transport_secure_sockets">
+      <cflags add="-I ./amazon-freertos/libraries/abstractions/secure_sockets/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include/private -I ./amazon-freertos/libraries/logging/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/abstractions/transport/secure_sockets/transport_secure_sockets.c"/>
+      <file category="header" name="./amazon-freertos/libraries/abstractions/transport/secure_sockets/transport_secure_sockets.h"/>
+    </group>
+    <group name="libraries_abstractions_wifi">
+      <file category="header" name="./amazon-freertos/libraries/abstractions/wifi/include/iot_wifi.h"/>
+    </group>
+    <group name="libraries_c_sdk_standard_common">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/c_sdk/standard/common/iot_device_metrics.c"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/c_sdk/standard/common/iot_init.c"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/c_sdk/standard/common/iot_static_memory_common.c"/>
+    </group>
+    <group name="libraries_c_sdk_standard_common_include">
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/iot_atomic.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/iot_init.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/iot_linear_containers.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/iot_logging_setup.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/iot_taskpool.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/private/iot_default_root_certificates.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/private/iot_error.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/private/iot_lib_init.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/private/iot_logging.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/private/iot_static_memory.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/private/iot_taskpool_internal.h"/>
+      <file category="header" name="./amazon-freertos/libraries/c_sdk/standard/common/include/types/iot_taskpool_types.h"/>
+    </group>
+    <group name="libraries_c_sdk_standard_common_taskpool">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/c_sdk/standard/common/taskpool/iot_taskpool.c"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/c_sdk/standard/common/taskpool/iot_taskpool_static_memory.c"/>
+    </group>
+    <group name="libraries_logging">
+      <cflags add="-I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/platform/freertos/include -I ./amazon-freertos/libraries/abstractions/platform/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include -I ./amazon-freertos/libraries/logging/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/logging/iot_logging.c"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/logging/iot_logging_task_dynamic_buffers.c"/>
+      <file category="header" name="./amazon-freertos/libraries/logging/include/iot_logging_task.h"/>
+      <file category="header" name="./amazon-freertos/libraries/logging/include/logging_levels.h"/>
+      <file category="header" name="./amazon-freertos/libraries/logging/include/logging_stack.h"/>
+    </group>
+    <group name="libraries_freertos_plus_standard_crypto">
+      <cflags add="-DMBEDTLS_CONFIG_FILE=\&quot;aws_mbedtls_config.h\&quot; -I ./Interfaces -I ./amazon-freertos/libraries/freertos_plus/standard/crypto/include -I ./config_files" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/freertos_plus/standard/crypto/src/iot_crypto.c"/>
+      <file category="header" name="./amazon-freertos/libraries/freertos_plus/standard/crypto/include/iot_crypto.h"/>
+    </group>
+    <group name="libraries_freertos_plus_standard_tls">
+      <cflags add="-DMBEDTLS_CONFIG_FILE=\&quot;aws_mbedtls_config.h\&quot; -I ./Interfaces -I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include/private -I ./amazon-freertos/libraries/freertos_plus/standard/crypto/include -I ./amazon-freertos/libraries/freertos_plus/standard/tls/include -I ./amazon-freertos/libraries/logging/include -I ./config_files -Wno-macro-redefined -Wno-pragma-pack" compiler="AC6"/>
+      <file category="sourceC" name="./amazon-freertos/libraries/freertos_plus/standard/tls/src/iot_tls.c"/>
+      <file category="header" name="./amazon-freertos/libraries/freertos_plus/standard/tls/include/iot_tls.h"/>
+    </group>
+    <group name="config_files">
+      <file category="header" name="./config_files/aws_demo_config.h"/>
+      <file category="header" name="./config_files/aws_mbedtls_config.h"/>
+      <file category="header" name="./config_files/core_mqtt_config.h"/>
+      <file category="header" name="./config_files/core_pkcs11_config.h"/>
+      <file category="header" name="./config_files/iot_config.h"/>
+      <file category="header" name="./config_files/mqtt_demo_mutual_auth_config.h"/>
+      <file category="header" name="./config_files/aws_iot_network_config.h"/>
+      <file category="header" name="./config_files/aws_wifi_config.h"/>
+      <file category="header" name="./config_files/FreeRTOSIPConfig.h"/>
+      <file category="header" name="./config_files/iot_secure_sockets_config.h"/>
+    </group>
+    <group name="interfaces">
+      <cflags add="-I ./Interfaces -I ./amazon-freertos/demos/include -I ./amazon-freertos/libraries/abstractions/secure_sockets/include -I ./amazon-freertos/libraries/abstractions/wifi/include -I ./amazon-freertos/libraries/c_sdk/standard/common/include/private -I ./amazon-freertos/libraries/freertos_plus/standard/crypto/include -I ./amazon-freertos/libraries/freertos_plus/standard/tls/include -I ./amazon-freertos/libraries/logging/include -I ./config_files -Wno-macro-redefined -Wno-pragma-pack" compiler="AC6"/>
+      <file category="sourceC" name="./Interfaces/core_pkcs11_pal.c"/>
+      <file category="header" name="./Interfaces/threading_alt.h"/>
+      <file category="sourceC" name="./Interfaces/IoT_Socket/iot_secure_sockets.c"/>
+      <file category="header" name="./Interfaces/iot_socket.h"/>
+      <file category="sourceC" name="./Interfaces/VSocket/iot_socket.c"/>
+      <file category="header" name="./Interfaces/VSocket/arm_vsocket.h"/>
+    </group>
+    <group name="Board">
+      <file category="sourceC" name="./Board/VHT_MPS2_Cortex-M7/main.c"/>
+      <file category="header" name="./Board/VHT_MPS2_Cortex-M7/main.h"/>
+      <file category="header" name="./Board/IMXRT1050-EVKB/main.h"/>
+    </group>
+    <group name="Board IO">
+      <file category="sourceC" name="./Board/VHT_MPS2_Cortex-M7/retarget_stdio.c"/>
+    </group>
+  </files>
+
+</cprj>

@@ -177,7 +177,7 @@ WIFIReturnCode_t WIFI_ConnectAP (const WIFINetworkParams_t * const pxNetworkPara
       config.security = ARM_WIFI_SECURITY_UNKNOWN; break;
   }
 
-  config.ch = pxNetworkParams->ucChannel;
+  config.ch = 0U;
   config.wps_method = ARM_WIFI_WPS_METHOD_NONE;
 
   stat = Driver_WIFI->Activate(0U, &config);

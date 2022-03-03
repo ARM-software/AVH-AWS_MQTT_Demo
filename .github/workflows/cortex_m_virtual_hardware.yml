@@ -1,0 +1,52 @@
+name: Cortex-M7 Arm Virtual Hardware
+
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onschedule
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cortex_m_generic:
+    runs-on: ubuntu-latest
+      
+    name: Cortex-M7 Virtual Hardware Target
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2    
+      
+      - name: Prepare test suite
+        env: 
+          MQTT_BROKER_ENDPOINT: ${{ secrets.MQTT_BROKER_ENDPOINT }}
+          IOT_THING_NAME: ${{ secrets.IOT_THING_NAME }}
+          CLIENT_CERTIFICATE_PEM: ${{ secrets.CLIENT_CERTIFICATE_PEM }}
+          CLIENT_PRIVATE_KEY_PEM: ${{ secrets.CLIENT_PRIVATE_KEY_PEM }}
+        run: |
+          rsync -rR . ./vht
+          cd vht/amazon-freertos/demos/include
+          envsubst <aws_clientcredential.h.in >aws_clientcredential.h
+          envsubst <aws_clientcredential_keys.h.in >aws_clientcredential_keys.h
+          
+      - name: Execute test suite on Virtual Hardware at AWS
+        env: 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+        uses: Arm-Software/VHT-AMI@v2
+        with:
+          vht_in: ./vht
+          s3_bucket_name:  ${{ secrets.AWS_S3_BUCKET }}
+          ec2_instance_type: t2.xlarge
+          ec2_security_group_id: ${{ secrets.AWS_SECURITY_GROUP_ID }}
+          iam_profile: ${{ secrets.AWS_IAM_PROFILE }}
+          subnet_id: ${{ secrets.AWS_SUBNET_ID }}
+          terminate_ec2_instance: 'true'
+          vht_ami_version: '1.1.0'
+                    
+      - name: Fetch results from VHT
+        run: |
+          tar xvzf out.tar
+          cat ./home/ubuntu/vhtwork/out/image.axf.stdio
+          grep -il "Incoming Publish Message : Hello World!" ./home/ubuntu/vhtwork/out/image.axf.stdio
+          
+    

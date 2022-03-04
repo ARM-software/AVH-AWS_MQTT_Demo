@@ -13,7 +13,7 @@ be then observed in repository's [GitHub Actions](https://github.com/ARM-softwar
 
 ## Setup of CI Test
 
-To build and run this application program a CI workflow on GitHub the following steps are required. For details refer to [Run AMI with GitHub Actions - GetHub-hosted Runners](https://arm-software.github.io/VHT/main/infrastructure/html/run_ami_github.html#GitHub_hosted).
+To build and run this application program with a CI workflow on GitHub the following steps are required. For details refer to [Run AMI with GitHub Actions - GetHub-hosted Runners](https://arm-software.github.io/VHT/main/infrastructure/html/run_ami_github.html#GitHub_hosted).
 
 1. **Amazon Web Service (AWS) account** with:
     - Amazon EC2 (elastic cloud) access

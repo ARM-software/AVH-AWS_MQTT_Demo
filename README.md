@@ -1,7 +1,37 @@
-# VHT_AWS_MQTT_Demo
-AWS MQTT Demo for Arm Virtual Hardware
+# AWS MQTT Demo for Arm Virtual Hardware
 
-## Secret values 
+This project demonstrates how to setup a development workflow with cloud-based Continuous Integration (CI) for testing an IoT application that connects to AWS cloud services.
+
+The application can be tested using [Arm Virtual Hardware](https://www.arm.com/virtual-hardware). Code development and debug can be done
+locally, for example with [CMSIS-Build](https://arm-software.github.io/CMSIS_5/develop/Build/html/index.html) and [Keil MDK](https://developer.arm.com/tools-and-software/embedded/keil-mdk) tools. We are also working on a development flow for [Keil Studio](https://keil.arm.com) that will provide a cloud-native development environment.
+
+Automated test execution is managed with GitHub Actions and gets triggered on
+every code change in the repository. The program gets built and run on [Arm
+Virtual Hardware](https://www.arm.com/products/development-tools/simulation/virtual-hardware) cloud infrastructure in AWS and the test results can
+be then observed in repository's [GitHub Actions](https://github.com/ARM-software/VHT-GetStarted/actions).
+
+
+## Setup of CI Test
+
+To build and run this application program a CI workflow on GitHub the following steps are required:
+
+1. **Amazon Web Service (AWS) account** with:
+  - Amazon EC2 (elastic cloud) access
+  - Amazon S3 (storage) access
+  - Registration to access AVH Amazon Machine Image [AVH AMI](https://aws.amazon.com/marketplace/search/results?searchTerms=Arm+Virtual+Hardware)
+  - User role setup for scripted API access
+
+2. **GitHub**:
+  - Fork this repository with at least _Write_ access rights
+  - Store AWS account configuration values (obtained in step 1) as
+    [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) of the forked repository
+    
+3. **AWS IoT Thing**:
+  - Use the [AWS IoT console](https://console.aws.amazon.com/iotv2/) to create a thing, download its certificates, create a policy, and attach the policy to the thing
+  - Store this configuration values as [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) of the forked repository
+    
+
+## GetHub Secrets - Values 
 
 The following (secret) configuration values need to be added to the repositories 
 [Secret store](../../settings/secrets/actions):

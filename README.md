@@ -13,22 +13,22 @@ be then observed in repository's [GitHub Actions](https://github.com/ARM-softwar
 
 ## Setup of CI Test
 
-To build and run this application program a CI workflow on GitHub the following steps are required:
+To build and run this application program a CI workflow on GitHub the following steps are required. For details refer to [Run AMI with GitHub Actions - GetHub-hosted Runners](https://arm-software.github.io/VHT/main/infrastructure/html/run_ami_github.html#GitHub_hosted).
 
 1. **Amazon Web Service (AWS) account** with:
-  - Amazon EC2 (elastic cloud) access
-  - Amazon S3 (storage) access
-  - Registration to access AVH Amazon Machine Image [AVH AMI](https://aws.amazon.com/marketplace/search/results?searchTerms=Arm+Virtual+Hardware)
-  - User role setup for scripted API access
+    - Amazon EC2 (elastic cloud) access
+    - Amazon S3 (storage) access
+    - Registration to access AVH Amazon Machine Image [AVH AMI](https://aws.amazon.com/marketplace/search/results?searchTerms=Arm+Virtual+Hardware)
+    - User role setup for scripted API access
 
 2. **GitHub**:
-  - Fork this repository with at least _Write_ access rights
-  - Store AWS account configuration values (obtained in step 1) as
-    [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) of the forked repository
+    - Fork this repository with at least _Write_ access rights
+    - Store the AWS account configuration (obtained in step 1) as
+    [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) - ***AWS Access** values in the forked repository
     
 3. **AWS IoT Thing**:
-  - Use the [AWS IoT console](https://console.aws.amazon.com/iotv2/) to create a thing, download its certificates, create a policy, and attach the policy to the thing
-  - Store this configuration values as [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) of the forked repository
+    - Use the [AWS IoT console](https://console.aws.amazon.com/iotv2/) to create a thing, download its certificates, create a policy, and attach the policy to the thing
+    - Store this configuration as [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets) - **IoT Cloud Access** values in the forked repository
     
 
 ## GetHub Secrets - Values 

@@ -35,7 +35,7 @@ jobs:
         uses: Arm-Software/VHT-AMI@v2
         with:
           vht_in: ./vht
-          s3_bucket_name:  ${{ secrets.AWS_S3_BUCKET }}
+          s3_bucket_name:  ${{ secrets.AWS_S3_BUCKET_NAME }}
           ec2_instance_type: t2.xlarge
           ec2_security_group_id: ${{ secrets.AWS_SECURITY_GROUP_ID }}
           iam_profile: ${{ secrets.AWS_IAM_PROFILE }}

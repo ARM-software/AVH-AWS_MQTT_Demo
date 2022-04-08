@@ -8,12 +8,12 @@ locally, for example with [CMSIS-Build](https://arm-software.github.io/CMSIS_5/d
 Automated test execution is managed with GitHub Actions and gets triggered on
 every code change in the repository. The program gets built and run on [Arm
 Virtual Hardware](https://www.arm.com/products/development-tools/simulation/virtual-hardware) cloud infrastructure in AWS and the test results can
-be then observed in repository's [GitHub Actions](https://github.com/ARM-software/VHT-GetStarted/actions).
+be then observed in repository's [GitHub Actions](https://github.com/ARM-software/AVH-GetStarted/actions).
 
 
 ## Setup of CI Test
 
-To build and run this application program with a CI workflow on GitHub the following steps are required. For details refer to [Run AMI with GitHub Actions - GetHub-hosted Runners](https://arm-software.github.io/VHT/main/infrastructure/html/run_ami_github.html#GitHub_hosted).
+To build and run this application program with a CI workflow on GitHub the following steps are required. For details refer to [Run AMI with GitHub Actions - GetHub-hosted Runners](https://arm-software.github.io/AVH/main/infrastructure/html/run_ami_github.html#GitHub_hosted).
 
 1. **Amazon Web Service (AWS) account** with:
     - Amazon EC2 (elastic cloud) access

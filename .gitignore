@@ -1,0 +1,5 @@
+*.bak
+Objects
+*.zip
+RTE/**/*@*
+RTE/**/RTE_Components.h

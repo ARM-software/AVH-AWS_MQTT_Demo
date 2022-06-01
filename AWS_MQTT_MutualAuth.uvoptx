@@ -120,7 +120,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DbgFM</Key>
-          <Name>-I -S -L"armcortexm7ct" -O4102 -C0 -MC"$KARM\VHT\VHT_MPS2_Cortex-M7_MDK.exe" -MF -PF -MA</Name>
+          <Name>-I -S -L"armcortexm7ct" -O4102 -C0 -MC"$KARM\VHT\VHT_MPS2_Cortex-M7_MDK.exe" -MF"mdk_config.txt" -PF -MA</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>

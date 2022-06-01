@@ -8,7 +8,7 @@ from datetime import datetime
 from enum import Enum
 from zipfile import ZipFile
 
-from matrix_runner import main, matrix_axis, matrix_action, matrix_command
+from matrix_runner import main, matrix_axis, matrix_action, ConsoleReport, matrix_command
 
 
 def timestamp(t: datetime = datetime.now()):
@@ -43,6 +43,8 @@ def run(config, results):
         raise NotImplementedError(f"Action 'run' is not implemented for target {config.target[1]}!")
         
     yield run_vht(config)
+    ts = timestamp()
+    results[0].test_report.write(f"console-out-{config.target}-{ts}.log")
     if results[0].success:
         msgs = re.findall(r'Incoming Publish Message : Hello World!', results[0].output.getvalue())
         assert(msgs and len(msgs) == 15)
@@ -50,10 +52,10 @@ def run(config, results):
 
 @matrix_command(needs_shell=False)
 def run_cbuild(config):
-    return ["bash", "-c", f"cbuild.sh AWS_MQTT_MutualAuth.{config.target[1]}.cprj"]
+    return ["bash", "-c", f"cbuild.sh --quiet AWS_MQTT_MutualAuth.{config.target[1]}.cprj"]
 
 
-@matrix_command()
+@matrix_command(test_report=ConsoleReport())
 def run_vht(config):
     return ["VHT_MPS2_Cortex-M7", "--stat", "--simlimit", "850", "-f", "vht_config.txt", "Objects/image.axf"]
 

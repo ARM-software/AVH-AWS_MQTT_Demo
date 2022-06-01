@@ -2,7 +2,7 @@ name: "AVH AWS-MQTT Demo"
 workdir: ./
 backend:
   aws:
-    ami-version: ~=1.1
+    ami-version: ~=1.2
     instance-type: t2.micro
 upload:
   - amazon-freertos/**/*
@@ -24,3 +24,4 @@ steps:
 download:
   - RTE/**/RTE_Components.h
   - aws_mqtt-cm7-*.zip
+  - console-out-*.log

@@ -65,6 +65,7 @@ jobs:
         name: results
         path: |
           aws_mqtt-cm7-*.zip
+          console-out-*.log
         retention-days: 1
         if-no-files-found: error
       if: always()
